@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<head lang="en">
+    <title>Experimenting Mapping for D3 JS</title>
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style>
+        body{
+            position:absolute
+        }
+        h1, h2 {
+            position: absolute;
+
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <h2></h2>
+    <script>
+        var width = 700;
+        var height = 650;
+
+        var color = d3.scaleThreshold()
+            .domain([0, 500, 1000, 2000, 3000, 4000])
+            .range(d3.schemeOranges[9]);
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        //center (x-axis, y-axis)
+        // x-axis: bigger it gets, left it goes
+        // y-axis: bigger it gets, down it goes
+        var albersPorjection = d3.geoMercator()
+            .center([90, 23.8])
+            .scale(5350)
+            .translate([width/2, height/2]);
+
+        var path = d3.geoPath()
+            .projection(albersPorjection);
+
+
+        queue()
+            .defer(d3.json, "data/bd_light_map.json")
+            .defer(d3.tsv, "district_numbers.tsv")
+            .await(ready);
+        
+        
+
+        function ready(error, bd_light_map, district_numbers) {
+            if (error) throw error;
+
+            var numbersByDistrict = {};
+            district_numbers.forEach(function(d) {
+                numbersByDistrict[d.district] = +d.number
+            });
+            console.log(numbersByDistrict);
+
+            svg.append("g")
+                .attr("class", "districts")
+                .selectAll("path")
+                .data(bd_light_map.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .style("fill", function(d){
+                    b = numbersByDistrict[d.properties.NAME];
+                    c = color(b);
+                    return c;
+                })
+                .style("stroke", "white")
+                .on("mouseover", function(d){
+                    d3.select("h2").text(d.properties.NAME_1 + "=" + numbersByDistrict[d.properties.NAME_1]);
+                    d3.select(this).attr("class", "districts hover");
+                })
+                .on("mouseout", function(d){
+                    d3.select("h").text("");
+                    d3.select(this).attr("class", "districts");
+                });
+        }
+    </script>
+</body>
