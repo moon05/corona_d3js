@@ -4,15 +4,17 @@ import pandas as pd
 fields = ["Distname", "Division", "Geometry", "Shape Area", "Shape Leng",\
             "district_name", "Dist_code", "total_quarantine"]
 
-df = pd.read_csv("./bd_covid.csv", skipinitialspace=True, usecols=fields)
+df = pd.read_csv("./csv_data/bd_covid.csv", skipinitialspace=True, usecols=fields)
 
 districts = {"Khulna":0, "Chittagong":0, "Barisal": 0, "Sylhet": 0, \
-            "Rangpur": 0, "Dhaka": 0, "Rajshahi": 0}
+            "Rangpur": 0, "Dhaka": 0, "Rajshahi": 0, "Mymensingh": 0}
 
 def summary_districts():
     for index, row in df.iterrows():
         if row["Division"] == "Khulna":
             districts["Khulna"] += row["total_quarantine"]
+        elif row["Division"] == "Mymensingh":
+            districts["Dhaka"] += row["total_quarantine"]    
         elif row["Division"] == "Chittagong":
             districts["Chittagong"] += row["total_quarantine"]
         elif row["Division"] == "Barisal":

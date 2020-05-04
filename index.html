@@ -2,6 +2,10 @@
 
 <head lang="en">
     <title>Experimenting Mapping for D3 JS</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3-array.v1.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -9,15 +13,19 @@
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+
+    
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    
     <style>
         body{
-            position:absolute
+            display: flex;
+			min-height: 100vh;
+			flex-direction: column;
         }
-        h1, h2 {
-            position: absolute;
-
-        }
+        main{
+			flex: 1 0 auto;
+		}
     </style>
 
 
@@ -25,8 +33,53 @@
 </head>
 
 <body>
-    <h2></h2>
+    <header>
+        <div id="navbar">
+            <nav>
+                <div class="nav-wrapper">
+                    <ul id="nav-mobile" class="">
+                        <li><a href="index.html">Bangladesh Cases by Divisions</a></li>
+                        <li><a href="index.html">Bangladesh Detailed</a></li>
+                        <li><a href="index.html">US Based</a></li>
+                      </ul>
+                 
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="row">
+            
+            <div class="col s2">
+                <div>
+                    <h3 id="country_name">Bangladesh</h3>
+                    <h2 id="total_cases"></h2>
+                    <h3>Total Cases</h3>
+                    <div class="divider"></div>
+                    <h3 id="country_name">Bangladesh</h3>
+                    <h2></h2>
+                    <h3>Total Deaths</h3>
+                    <!-- <h2 class="numbers_popup"></h2> -->
+
+                </div>
+            </div>
+            <div class="map_container col s10">
+                
+                <div class="map"></div>
+            </div>
+            
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  
+
+
+
     <script>
+
         var width = 700;
         var height = 650;
 
@@ -34,10 +87,14 @@
             .domain([0, 500, 1000, 2000, 3000, 4000])
             .range(d3.schemeOranges[9]);
 
-        var svg = d3.select("body")
+        var tooltip = d3.select('div.map_container').append('div')
+        .attr('class', 'hidden tooltip');
+        
+        var svg = d3.select("div.map")
             .append("svg")
             .attr("width", width)
             .attr("height", height);
+        
         
         //center (x-axis, y-axis)
         // x-axis: bigger it gets, left it goes
@@ -53,19 +110,26 @@
 
         queue()
             .defer(d3.json, "data/bd_light_map.json")
-            .defer(d3.tsv, "district_numbers.tsv")
+            .defer(d3.tsv, "csv_data/division_numbers.tsv")
             .await(ready);
         
         
+        function sumDictionary(obj) {
+            return Object.keys(obj).reduce( (sum, key)=>sum + parseFloat( obj[key]||0 ) , 0 );
+        }
 
-        function ready(error, bd_light_map, district_numbers) {
+        
+        function ready(error, bd_light_map, division_numbers) {
             if (error) throw error;
 
             var numbersByDistrict = {};
-            district_numbers.forEach(function(d) {
+            division_numbers.forEach(function(d) {
                 numbersByDistrict[d.district] = +d.number
             });
-            console.log(numbersByDistrict);
+            var total_cases = sumDictionary(numbersByDistrict);
+            
+            d3.select("h2#total_cases").text(total_cases);
+            
 
             svg.append("g")
                 .attr("class", "districts")
@@ -81,12 +145,22 @@
                 })
                 .style("stroke", "white")
                 .on("mouseover", function(d){
-                    d3.select("h2").text(d.properties.NAME_1 + "=" + numbersByDistrict[d.properties.NAME_1]);
-                    d3.select(this).attr("class", "districts hover");
+                    d3.select(this).style("stroke", "blue");
+                    d3.select("h2.numbers_popup").text(d.properties.NAME + "=" + numbersByDistrict[d.properties.NAME]);
+                    d3.select(this).attr("class", "hover");
+                    var mouse = d3.mouse(svg.node()).map(function(d) {
+                        return parseInt(d);
+                    });
+                    tooltip.classed('hidden', false)
+                        .attr('style', 'left:' + (mouse[0] + 15) +
+                                'px; top:' + (mouse[1] - 200) + 'px')
+                        .html(d.properties.NAME);
                 })
-                .on("mouseout", function(d){
-                    d3.select("h").text("");
-                    d3.select(this).attr("class", "districts");
+                .on("mouseout", function(){
+                    tooltip.classed('hidden', true);
+                    d3.select(this).style("stroke", "white");
+                    d3.select("h2.numbers_popup").text("");
+                    d3.select(this).attr("class", "");
                 });
         }
     </script>
