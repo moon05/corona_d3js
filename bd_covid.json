@@ -1,0 +1,262 @@
+{
+    "cases": "cases",
+    "district": "district",
+    "items": [
+        {
+            "district": "Bagerhat",
+            "cases": "625"
+        },
+        {
+            "district": "Bandarban",
+            "cases": "5"
+        },
+        {
+            "district": "Barguna",
+            "cases": "110"
+        },
+        {
+            "district": "Barisal",
+            "cases": "43"
+        },
+        {
+            "district": "Bhola",
+            "cases": "65"
+        },
+        {
+            "district": "Bogra",
+            "cases": "429"
+        },
+        {
+            "district": "Brahmanbaria",
+            "cases": "357"
+        },
+        {
+            "district": "Chandpur",
+            "cases": "83"
+        },
+        {
+            "district": "Chittagong",
+            "cases": "766"
+        },
+        {
+            "district": "Chuadanga",
+            "cases": "161"
+        },
+        {
+            "district": "Comilla",
+            "cases": "239"
+        },
+        {
+            "district": "Cox's Bazar",
+            "cases": "87"
+        },
+        {
+            "district": "Dhaka",
+            "cases": "385"
+        },
+        {
+            "district": "Dinajpur",
+            "cases": "60"
+        },
+        {
+            "district": "Faridpur",
+            "cases": "458"
+        },
+        {
+            "district": "Feni",
+            "cases": "376"
+        },
+        {
+            "district": "Gaibandha",
+            "cases": "53"
+        },
+        {
+            "district": "Gazipur",
+            "cases": "105"
+        },
+        {
+            "district": "Gopalganj",
+            "cases": "115"
+        },
+        {
+            "district": "Habiganj",
+            "cases": "170"
+        },
+        {
+            "district": "Jamalpur",
+            "cases": "47"
+        },
+        {
+            "district": "Jessore",
+            "cases": "536"
+        },
+        {
+            "district": "Jhalokati",
+            "cases": "2"
+        },
+        {
+            "district": "Jhenaidah",
+            "cases": "163"
+        },
+        {
+            "district": "Joypurhat",
+            "cases": "44"
+        },
+        {
+            "district": "Khagrachhari",
+            "cases": "101"
+        },
+        {
+            "district": "Khulna",
+            "cases": "432"
+        },
+        {
+            "district": "Kishoreganj",
+            "cases": "314"
+        },
+        {
+            "district": "Kurigram",
+            "cases": "150"
+        },
+        {
+            "district": "Kushtia",
+            "cases": "50"
+        },
+        {
+            "district": "Lakshmipur",
+            "cases": "568"
+        },
+        {
+            "district": "Lalmonirhat",
+            "cases": "56"
+        },
+        {
+            "district": "Madaripur",
+            "cases": "287"
+        },
+        {
+            "district": "Magura",
+            "cases": "96"
+        },
+        {
+            "district": "Manikganj",
+            "cases": "300"
+        },
+        {
+            "district": "Maulvibazar",
+            "cases": "245"
+        },
+        {
+            "district": "Meherpur",
+            "cases": "97"
+        },
+        {
+            "district": "Munshiganj",
+            "cases": "297"
+        },
+        {
+            "district": "Mymensingh",
+            "cases": "357"
+        },
+        {
+            "district": "Naogaon",
+            "cases": "966"
+        },
+        {
+            "district": "Narail",
+            "cases": "172"
+        },
+        {
+            "district": "Narayanganj",
+            "cases": "102"
+        },
+        {
+            "district": "Narsingdi",
+            "cases": "144"
+        },
+        {
+            "district": "Natore",
+            "cases": "59"
+        },
+        {
+            "district": "Nawabganj",
+            "cases": "208"
+        },
+        {
+            "district": "Netrakona",
+            "cases": "74"
+        },
+        {
+            "district": "Nilphamari",
+            "cases": "104"
+        },
+        {
+            "district": "Noakhali",
+            "cases": "675"
+        },
+        {
+            "district": "Pabna",
+            "cases": "393"
+        },
+        {
+            "district": "Panchagarh",
+            "cases": "187"
+        },
+        {
+            "district": "Patuakhali",
+            "cases": "13"
+        },
+        {
+            "district": "Pirojpur",
+            "cases": "72"
+        },
+        {
+            "district": "Rajbari",
+            "cases": "264"
+        },
+        {
+            "district": "Rajshahi",
+            "cases": "149"
+        },
+        {
+            "district": "Rangamati",
+            "cases": "82"
+        },
+        {
+            "district": "Rangpur",
+            "cases": "20"
+        },
+        {
+            "district": "Satkhira",
+            "cases": "394"
+        },
+        {
+            "district": "Shariatpur",
+            "cases": "236"
+        },
+        {
+            "district": "Sherpur",
+            "cases": "59"
+        },
+        {
+            "district": "Sirajganj",
+            "cases": "109"
+        },
+        {
+            "district": "Sunamganj",
+            "cases": "128"
+        },
+        {
+            "district": "Sylhet",
+            "cases": "502"
+        },
+        {
+            "district": "Tangail",
+            "cases": "457"
+        },
+        {
+            "district": "Thakurgaon",
+            "cases": "29"
+        }
+    ]
+}

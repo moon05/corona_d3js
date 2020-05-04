@@ -6,27 +6,40 @@ fields = ["Distname", "Division", "Geometry", "Shape Area", "Shape Leng",\
 
 df = pd.read_csv("./csv_data/bd_covid.csv", skipinitialspace=True, usecols=fields)
 
-districts = {"Khulna":0, "Chittagong":0, "Barisal": 0, "Sylhet": 0, \
+divisions = {"Khulna":0, "Chittagong":0, "Barisal": 0, "Sylhet": 0, \
             "Rangpur": 0, "Dhaka": 0, "Rajshahi": 0, "Mymensingh": 0}
 
-def summary_districts():
+districts = {}
+
+def summary_divisions():
     for index, row in df.iterrows():
         if row["Division"] == "Khulna":
-            districts["Khulna"] += row["total_quarantine"]
+            divisions["Khulna"] += row["total_quarantine"]
         elif row["Division"] == "Mymensingh":
-            districts["Dhaka"] += row["total_quarantine"]    
+            divisions["Dhaka"] += row["total_quarantine"]    
         elif row["Division"] == "Chittagong":
-            districts["Chittagong"] += row["total_quarantine"]
+            divisions["Chittagong"] += row["total_quarantine"]
         elif row["Division"] == "Barisal":
-            districts["Barisal"] += row["total_quarantine"]
+            divisions["Barisal"] += row["total_quarantine"]
         elif row["Division"] == "Sylhet":
-            districts["Sylhet"] += row["total_quarantine"]
+            divisions["Sylhet"] += row["total_quarantine"]
         elif row["Division"] == "Rangpur":
-            districts["Rangpur"] += row["total_quarantine"]
+            divisions["Rangpur"] += row["total_quarantine"]
         elif row["Division"] == "Dhaka":
-            districts["Dhaka"] += row["total_quarantine"]
+            divisions["Dhaka"] += row["total_quarantine"]
         elif row["Division"] == "Rajshahi":
-            districts["Rajshahi"] += row["total_quarantine"]
+            divisions["Rajshahi"] += row["total_quarantine"]
+
+
+def summary_districts():
+    dist_names = list(set(df.Distname))
+    t_dict = {key: 0 for key in dist_names}
+    for index, row in df.iterrows():
+        print (row["Distname"], row["total_quarantine"])
+        t_dict[row["Distname"]] += row["total_quarantine"]
+    global districts
+    districts = t_dict
+    
 
 
 def write_tsv_file(name):
@@ -48,7 +61,6 @@ def write_csv_file(name):
 
 summary_districts()
 
-print (districts)
 print (sum(districts.values()))
 
 write_tsv_file("district_numbers")

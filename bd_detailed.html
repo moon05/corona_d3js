@@ -63,33 +63,19 @@
     <main>
         <div class="row">
             
-            <div class="col s3">
-                <div class="right-align">
-                    <h4 id="country_name" class="green-text" >Bangladesh</43>
-                    <h3 id="total_cases" class="red-text"></h3>
-                    <h4 class="red-text">Total Cases</h4>
-                    <div class="divider"></div>
-                    <h4 id="country_name" class="green-text">Bangladesh</h4>
-                    <h2 id="total_deaths" class="red-text"></h2>
-                    <h4 class="red-text">Total Deaths</h4>
-                    <!-- <h2 class="numbers_popup"></h2> -->
-
-                </div>
-
-                <div class="viewport">
-
-                </div>
-            </div>
             <div class="map_container col s9">
                 
                 <div class="map"></div>
             </div>
+
+            <div class="col s3"></div>
             
         </div>
     </main>
     <footer>
 
     </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   
 
@@ -101,9 +87,8 @@
         var height = 650;
 
         var color = d3.scaleThreshold()
-            .domain([0, 500, 1000, 2000, 3000, 4000])
-            .range(d3.schemeOranges[9]);
-
+            .domain([0, 100, 200, 300, 500, 700])
+            .range(d3.schemeReds[7]);
         var tooltip = d3.select('div.map_container').append('div')
         .attr('class', 'hidden tooltip');
         
@@ -126,8 +111,8 @@
 
 
         queue()
-            .defer(d3.json, "geodata/bd_light_map.json")
-            .defer(d3.tsv, "csv_data/division_numbers.tsv")
+            .defer(d3.json, "geodata/bd_heavy_map.json")
+            .defer(d3.tsv, "csv_data/district_numbers.tsv")
             .await(ready);
         
         
@@ -135,117 +120,35 @@
             return Object.keys(obj).reduce( (sum, key)=>sum + parseFloat( obj[key]||0 ) , 0 );
         }
 
-//         var tabulate = function (data,columns) {
-//   var table = d3.select('div.csv_table').append('table')
-// 	var thead = table.append('thead')
-// 	var tbody = table.append('tbody')
-
-// 	thead.append('tr')
-// 	  .selectAll('th')
-// 	    .data(columns)
-// 	    .enter()
-// 	  .append('th')
-// 	    .text(function (d) { return d })
-
-// 	var rows = tbody.selectAll('tr')
-// 	    .data(data)
-// 	    .enter()
-// 	  .append('tr')
-
-// 	var cells = rows.selectAll('td')
-// 	    .data(function(row) {
-// 	    	return columns.map(function (column) {
-// 	    		return { column: column, value: row[column] }
-// 	      })
-//       })
-//       .enter()
-//     .append('td')
-//       .text(function (d) { return d.value })
-
-//   return table;
-// }
-
-//         d3.csv("csv_data/bd_covid.csv", function (data) {
-//             var columns = ["Distname", "total_quarantine"];
-//             tabulate(data, columns);
-//         });
-
-
-
-    d3.json("bd_covid.json", function(states) {
-        var scrollSVG = d3.select(".viewport")
-                            .append("svg")  
-                            .attr("class", "scroll-svg");
-
-        var defs = scrollSVG.insert("defs", ":first-child");
-
-        var rowEnter = function(rowSelection) {
-            rowSelection.append("rect")
-                .attr("rx", 3)
-                .attr("ry", 3)
-                .attr("width", "250")
-                .attr("height", "24")
-                .attr("fill-opacity", 0.25)
-                .attr("stroke", "#999999")
-                .attr("stroke-width", "2px");
-            rowSelection.append("text")
-                .attr("transform", "translate(10,15)");
-        };
-        var rowUpdate = function(rowSelection) {
-
-            rowSelection.select("text")
-                .text(function (d) {
-                    return (d.index + 1) + ". " + d.district + " " + d.cases;
-                });
-        };
-
-        var rowExit = function(rowSelection) {
-        };
-
-        var virtualScroller = d3.VirtualScroller()
-            .rowHeight(30)
-            .enter(rowEnter)
-            .update(rowUpdate)
-            .exit(rowExit)
-            .svg(scrollSVG)
-            .totalRows(20)
-            .viewport(d3.select(".viewport"));
-
-        states.items.forEach(function(nextState, i) {
-            nextState.index = i;
-        });
-
-    })
 
         
-        function ready(error, bd_light_map, division_numbers) {
+        function ready(error, bd_heavy_map, district_numbers) {
             if (error) throw error;
 
             var numbersByDistrict = {};
-            division_numbers.forEach(function(d) {
+            district_numbers.forEach(function(d) {
                 numbersByDistrict[d.district] = +d.number
             });
             var total_cases = sumDictionary(numbersByDistrict);
             
-            d3.select("#total_cases").text(total_cases);
-            
+            d3.select("#total_cases").text(total_cases);            
 
             svg.append("g")
                 .attr("class", "districts")
                 .selectAll("path")
-                .data(bd_light_map.features)
+                .data(bd_heavy_map.features)
                 .enter()
                 .append("path")
                 .attr("d", path)
                 .style("fill", function(d){
-                    b = numbersByDistrict[d.properties.NAME];
+                    b = numbersByDistrict[d.properties.DISTNAME];
                     c = color(b);
                     return c;
                 })
                 .style("stroke", "white")
                 .on("mouseover", function(d){
                     d3.select(this).style("stroke", "steelblue");
-                    d3.select("h2.numbers_popup").text(d.properties.NAME + "=" + numbersByDistrict[d.properties.NAME]);
+                    d3.select("h2.numbers_popup").text(d.properties.DISTNAME + "=" + numbersByDistrict[d.properties.DISTNAME]);
                     d3.select(this).attr("class", "hover");
                     var mouse = d3.mouse(svg.node()).map(function(d) {
                         return parseInt(d);
@@ -253,7 +156,7 @@
                     tooltip.classed('hidden', false)
                         .attr('style', 'left:' + (mouse[0] + 15) +
                                 'px; top:' + (mouse[1] - 200) + 'px')
-                        .html(d.properties.NAME + ": " + numbersByDistrict[d.properties.NAME]);
+                        .html(d.properties.NAME);
                 })
                 .on("mouseout", function(){
                     tooltip.classed('hidden', true);
